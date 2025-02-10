@@ -1,12 +1,9 @@
 import {
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   Index,
   ManyToOne,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
   JoinColumn,
   OneToOne,
 } from 'typeorm';
@@ -62,13 +59,4 @@ export class UserEntity extends EntityRelationalHelper {
     eager: true,
   })
   status?: StatusEntity;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 }
