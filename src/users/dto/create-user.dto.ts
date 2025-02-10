@@ -17,13 +17,13 @@ import { StatusDto } from '../../statuses/dto/status.dto';
 import { lowerCaseTransformer } from '../../utils/transformers/lower-case.transformer';
 
 export class CreateUserDto {
-  @ApiProperty({ example: 'test1@example.com', type: String })
+  @ApiProperty({ example: 'lucasaleh@yopmail.com', type: String })
   @Transform(lowerCaseTransformer)
   @IsNotEmpty()
   @IsEmail()
   email: string | null;
 
-  @ApiProperty()
+  @ApiProperty({ example: '12345a@A', type: String })
   @MinLength(6)
   password?: string;
 
@@ -31,11 +31,11 @@ export class CreateUserDto {
 
   socialId?: string | null;
 
-  @ApiProperty({ example: 'John', type: String })
+  @ApiProperty({ example: 'Lucas', type: String })
   @IsNotEmpty()
   firstName: string | null;
 
-  @ApiProperty({ example: 'Doe', type: String })
+  @ApiProperty({ example: 'Aleh', type: String })
   @IsNotEmpty()
   lastName: string | null;
 
