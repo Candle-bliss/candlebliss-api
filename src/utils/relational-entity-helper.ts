@@ -2,6 +2,7 @@ import { instanceToPlain } from 'class-transformer';
 import {
   AfterLoad,
   BaseEntity,
+  Column,
   CreateDateColumn,
   DeleteDateColumn,
   UpdateDateColumn,
@@ -18,6 +19,9 @@ export class EntityRelationalHelper extends BaseEntity {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @Column({ type: Boolean, default: false })
+  isDeleted: boolean;
 
   @AfterLoad()
   setEntityName() {
