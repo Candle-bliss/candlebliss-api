@@ -3,6 +3,7 @@ import { FileType } from '../../files/domain/file';
 import { Role } from '../../roles/domain/role';
 import { Status } from '../../statuses/domain/status';
 import { ApiProperty } from '@nestjs/swagger';
+import { Address } from '../../address/domain/address';
 
 const idType = Number;
 
@@ -62,6 +63,9 @@ export class User {
     type: () => Status,
   })
   status?: Status;
+
+  @ApiProperty({ type: () => Address })
+  address?: Address | null;
 
   @ApiProperty()
   createdAt: Date;
