@@ -9,17 +9,17 @@ export class AuthUpdateDto {
   @IsOptional()
   photo?: FileDto | null;
 
-  @ApiPropertyOptional({ example: 'John' })
+  @ApiPropertyOptional({ example: 'Lucas' })
   @IsOptional()
   @IsNotEmpty({ message: 'mustBeNotEmpty' })
   firstName?: string;
 
-  @ApiPropertyOptional({ example: 'Doe' })
+  @ApiPropertyOptional({ example: 'Aleh' })
   @IsOptional()
   @IsNotEmpty({ message: 'mustBeNotEmpty' })
   lastName?: string;
 
-  @ApiPropertyOptional({ example: 'new.email@example.com' })
+  @ApiPropertyOptional({ example: 'lucasaleh@yopmail.com' })
   @IsOptional()
   @IsNotEmpty()
   @IsEmail()
