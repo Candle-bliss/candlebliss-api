@@ -25,7 +25,9 @@ import { MailerModule } from './mailer/mailer.module';
 import { AddressModule } from './address/address.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { QueueModule } from './queue/queue.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import queueConfig from './queue/config/queue.config';
+import cloudinaryConfig from './cloudinary/config/cloudinary.config';
 
 const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
   useClass: TypeOrmConfigService,
@@ -47,6 +49,7 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
         facebookConfig,
         googleConfig,
         queueConfig,
+        cloudinaryConfig,
       ],
       envFilePath: ['.env'],
     }),
@@ -75,7 +78,6 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
       inject: [ConfigService],
     }),
     ThrottlerModule.forRoot([{ ttl: 60 * 60, limit: 1000 }]),
-    QueueModule,
     UsersModule,
     FilesModule,
     AuthModule,
@@ -87,6 +89,7 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
     HomeModule,
     AddressModule,
     QueueModule,
+    CloudinaryModule,
   ],
 })
 export class AppModule {}

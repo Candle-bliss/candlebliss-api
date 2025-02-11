@@ -6,7 +6,7 @@ import {
   SEND_MAIL_SIGNUP,
 } from 'src/utils/constants/queue.constant';
 import { MailerService } from 'src/mailer/mailer.service';
-import { Job } from 'bullmq';
+import { Job } from 'bull';
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from 'src/config/config.type';
 import { MailData } from '../interfaces/mail-data.interface';
