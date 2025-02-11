@@ -2,17 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { I18nContext } from 'nestjs-i18n';
 import { MailData } from './interfaces/mail-data.interface';
-
-import { MaybeType } from '../utils/types/maybe.type';
-import { MailerService } from '../mailer/mailer.service';
-import path from 'path';
-import { AllConfigType } from '../config/config.type';
+import { MaybeType } from 'src/utils/types/maybe.type';
+import { AllConfigType } from 'src/config/config.type';
+import { InjectQueue } from '@nestjs/bull';
+import {
+  MAIL_QUEUE,
+  SEND_CONFIRM_EMAIL,
+  SEND_MAIL_FORGOT_PASSWORD,
+  SEND_MAIL_SIGNUP,
+} from 'src/utils/constants/queue.constant';
+import { Queue } from 'bull';
 
 @Injectable()
 export class MailService {
   constructor(
-    private readonly mailerService: MailerService,
     private readonly configService: ConfigService<AllConfigType>,
+    @InjectQueue(MAIL_QUEUE) private readonly queue: Queue,
   ) {}
 
   async userSignUp(mailData: MailData<{ hash: string }>): Promise<void> {
@@ -38,29 +43,18 @@ export class MailService {
     );
     url.searchParams.set('hash', mailData.data.hash);
 
-    await this.mailerService.sendMail({
-      to: mailData.to,
-      subject: emailConfirmTitle,
-      text: `${url.toString()} ${emailConfirmTitle}`,
-      templatePath: path.join(
-        this.configService.getOrThrow('app.workingDirectory', {
-          infer: true,
-        }),
-        'src',
-        'mail',
-        'mail-templates',
-        'activation.hbs',
-      ),
-      context: {
-        title: emailConfirmTitle,
+    await this.queue.add(
+      SEND_MAIL_SIGNUP,
+      {
+        mailData,
         url: url.toString(),
-        actionTitle: emailConfirmTitle,
-        app_name: this.configService.get('app.name', { infer: true }),
+        emailConfirmTitle,
         text1,
         text2,
         text3,
       },
-    });
+      { delay: 2000 },
+    );
   }
 
   async forgotPassword(
@@ -91,32 +85,19 @@ export class MailService {
     url.searchParams.set('hash', mailData.data.hash);
     url.searchParams.set('expires', mailData.data.tokenExpires.toString());
 
-    await this.mailerService.sendMail({
-      to: mailData.to,
-      subject: resetPasswordTitle,
-      text: `${url.toString()} ${resetPasswordTitle}`,
-      templatePath: path.join(
-        this.configService.getOrThrow('app.workingDirectory', {
-          infer: true,
-        }),
-        'src',
-        'mail',
-        'mail-templates',
-        'reset-password.hbs',
-      ),
-      context: {
-        title: resetPasswordTitle,
+    await this.queue.add(
+      SEND_MAIL_FORGOT_PASSWORD,
+      {
+        mailData,
         url: url.toString(),
-        actionTitle: resetPasswordTitle,
-        app_name: this.configService.get('app.name', {
-          infer: true,
-        }),
+        resetPasswordTitle,
         text1,
         text2,
         text3,
         text4,
       },
-    });
+      { delay: 2000 },
+    );
   }
 
   async confirmNewEmail(mailData: MailData<{ hash: string }>): Promise<void> {
@@ -142,28 +123,13 @@ export class MailService {
     );
     url.searchParams.set('hash', mailData.data.hash);
 
-    await this.mailerService.sendMail({
-      to: mailData.to,
-      subject: emailConfirmTitle,
-      text: `${url.toString()} ${emailConfirmTitle}`,
-      templatePath: path.join(
-        this.configService.getOrThrow('app.workingDirectory', {
-          infer: true,
-        }),
-        'src',
-        'mail',
-        'mail-templates',
-        'confirm-new-email.hbs',
-      ),
-      context: {
-        title: emailConfirmTitle,
-        url: url.toString(),
-        actionTitle: emailConfirmTitle,
-        app_name: this.configService.get('app.name', { infer: true }),
-        text1,
-        text2,
-        text3,
-      },
+    await this.queue.add(SEND_CONFIRM_EMAIL, {
+      mailData,
+      url: url.toString(),
+      emailConfirmTitle,
+      text1,
+      text2,
+      text3,
     });
   }
 }
