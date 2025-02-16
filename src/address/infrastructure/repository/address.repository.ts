@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { AddressRepository } from '../address.repository';
 import { Address } from '../../domain/address';
 import { InjectRepository } from '@nestjs/typeorm';
+import { NullableType } from 'src/utils/types/nullable.type';
 import { AddressEntity } from '../entities/address.entity';
 import { Repository } from 'typeorm';
-import { NullableType } from '../../../utils/types/nullable.type';
 import { UserEntity } from 'src/users/infrastructure/persistence/relational/entities/user.entity';
 
 @Injectable()
