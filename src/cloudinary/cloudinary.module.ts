@@ -1,27 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CloudinaryService } from './cloudinary.service';
-import { CLOUDINARY } from '../utils/constants/cloudinary.constant';
-import { ConfigService } from '@nestjs/config';
+import { CloudinaryProvider } from './cloudinary.provider';
 import { BullModule } from '@nestjs/bull';
+import { UPLOAD } from '../utils/constants/cloudinary.constant';
 
 @Module({
-  providers: [
-    {
-      provide: CLOUDINARY,
-      useFactory: (configService: ConfigService) => ({
-        cloud_name: configService.get('cloudinary.cloud_name', { infer: true }),
-        api_key: configService.get('cloudinary.api_key', { infer: true }),
-        api_secret: configService.get('cloudinary.api_secret', { infer: true }),
-      }),
-      inject: [ConfigService],
-    },
-    CloudinaryService,
-  ],
-  imports: [
-    BullModule.registerQueue({
-      name: CLOUDINARY,
-    }),
-  ],
+  providers: [CloudinaryProvider, CloudinaryService],
+  imports: [BullModule.registerQueue({ name: UPLOAD })],
   exports: [CloudinaryService],
 })
 export class CloudinaryModule {}
