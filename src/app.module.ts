@@ -9,15 +9,11 @@ import mailConfig from './mail/config/mail.config';
 import fileConfig from './files/config/file.config';
 import facebookConfig from './auth-facebook/config/facebook.config';
 import googleConfig from './auth-google/config/google.config';
-import twitterConfig from './auth-twitter/config/twitter.config';
-import appleConfig from './auth-apple/config/apple.config';
 import path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthAppleModule } from './auth-apple/auth-apple.module';
 import { AuthFacebookModule } from './auth-facebook/auth-facebook.module';
 import { AuthGoogleModule } from './auth-google/auth-google.module';
-import { AuthTwitterModule } from './auth-twitter/auth-twitter.module';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { MailModule } from './mail/mail.module';
@@ -26,23 +22,21 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { AllConfigType } from './config/config.type';
 import { SessionModule } from './session/session.module';
 import { MailerModule } from './mailer/mailer.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { MongooseConfigService } from './database/mongoose-config.service';
-import { DatabaseConfig } from './database/config/database-config.type';
+import { AddressModule } from './address/address.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { QueueModule } from './queue/queue.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ProductsModule } from './products/products.module';
+import { ImagesModule } from './images/images.module';
+import queueConfig from './queue/config/queue.config';
+import cloudinaryConfig from './cloudinary/config/cloudinary.config';
 
-// <database-block>
-const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
-  .isDocumentDatabase
-  ? MongooseModule.forRootAsync({
-      useClass: MongooseConfigService,
-    })
-  : TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService,
-      dataSourceFactory: async (options: DataSourceOptions) => {
-        return new DataSource(options).initialize();
-      },
-    });
-// </database-block>
+const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
+  useClass: TypeOrmConfigService,
+  dataSourceFactory: async (options: DataSourceOptions) => {
+    return new DataSource(options).initialize();
+  },
+});
 
 @Module({
   imports: [
@@ -56,8 +50,8 @@ const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
         fileConfig,
         facebookConfig,
         googleConfig,
-        twitterConfig,
-        appleConfig,
+        queueConfig,
+        cloudinaryConfig,
       ],
       envFilePath: ['.env'],
     }),
@@ -85,17 +79,21 @@ const infrastructureDatabaseModule = (databaseConfig() as DatabaseConfig)
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    ThrottlerModule.forRoot([{ ttl: 60 * 60, limit: 1000 }]),
     UsersModule,
     FilesModule,
     AuthModule,
     AuthFacebookModule,
     AuthGoogleModule,
-    AuthTwitterModule,
-    AuthAppleModule,
     SessionModule,
     MailModule,
     MailerModule,
     HomeModule,
+    AddressModule,
+    QueueModule,
+    CloudinaryModule,
+    ProductsModule,
+    ImagesModule,
   ],
 })
 export class AppModule {}

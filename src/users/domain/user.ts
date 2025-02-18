@@ -3,14 +3,9 @@ import { FileType } from '../../files/domain/file';
 import { Role } from '../../roles/domain/role';
 import { Status } from '../../statuses/domain/status';
 import { ApiProperty } from '@nestjs/swagger';
-import databaseConfig from '../../database/config/database.config';
-import { DatabaseConfig } from '../../database/config/database-config.type';
+import { Address } from '../../address/domain/address';
 
-// <database-block>
-const idType = (databaseConfig() as DatabaseConfig).isDocumentDatabase
-  ? String
-  : Number;
-// </database-block>
+const idType = Number;
 
 export class User {
   @ApiProperty({
@@ -68,6 +63,9 @@ export class User {
     type: () => Status,
   })
   status?: Status;
+
+  @ApiProperty({ type: () => Address })
+  address?: Address | null;
 
   @ApiProperty()
   createdAt: Date;
