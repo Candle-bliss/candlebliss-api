@@ -4,9 +4,8 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { Product } from './domain/product';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { NullableType } from '../utils/types/nullable.type';
-import { FilterProductDto, SortProductDto } from './dto/query-product.dto';
-import { IPaginationOptions } from '../utils/types/pagination-options';
 import { ImagesService } from '../images/images.service';
+import { Image } from '../images/domain/image';
 
 @Injectable()
 export class ProductsService {
@@ -14,17 +13,23 @@ export class ProductsService {
     private readonly productRepository: ProductRepository,
     private readonly imagesSerivce: ImagesService,
   ) {}
-
-  async create(
+  async createProduct(
     dto: CreateProductDto,
     imagesDto: Express.Multer.File[],
   ): Promise<Product> {
-    const uploadedImages =
-      await this.imagesSerivce.uploadCloudImages(imagesDto);
+    if (imagesDto.length > 10) {
+      throw new UnprocessableEntityException(
+        'You can only upload up to 10 images.',
+      );
+    }
+    let image: Image[] = [];
+    if (imagesDto) {
+      image = await this.imagesSerivce.uploadCloudImages(imagesDto);
+    }
 
     return this.productRepository.create({
       ...dto,
-      images: uploadedImages,
+      images: image,
     });
   }
 
@@ -38,6 +43,7 @@ export class ProductsService {
         await this.imagesSerivce.uploadCloudImages(imagesDto);
       payload = { ...payload, images: uploadedImages };
     }
+
     const updatedProduct = this.productRepository.update(id, payload);
     if (!updatedProduct) {
       throw new UnprocessableEntityException(
@@ -57,21 +63,5 @@ export class ProductsService {
 
   remove(id: Product['id']): Promise<void> {
     return this.productRepository.remove(id);
-  }
-
-  findManyWithPagination({
-    filterOptions,
-    sortOptions,
-    paginationOptions,
-  }: {
-    filterOptions?: FilterProductDto | null;
-    sortOptions?: SortProductDto[] | null;
-    paginationOptions: IPaginationOptions;
-  }): Promise<Product[]> {
-    return this.productRepository.findManyWithPagination({
-      filterOptions,
-      sortOptions,
-      paginationOptions,
-    });
   }
 }

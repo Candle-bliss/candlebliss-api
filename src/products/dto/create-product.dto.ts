@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateProductDto {
   @ApiProperty({ type: String, example: 'Nen Thom Huong Vai' })
@@ -20,20 +20,4 @@ export class CreateProductDto {
   @IsString()
   @IsOptional()
   video?: string;
-
-  @ApiProperty({ type: String, example: 'Size M' })
-  @IsString()
-  @IsOptional()
-  size?: string;
-
-  @ApiProperty({ type: String, example: 'Huong hoa nhai' })
-  @IsString()
-  @IsOptional()
-  type?: string;
-
-  @ApiProperty({ type: Number, example: 100 })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  quantities?: number;
 }

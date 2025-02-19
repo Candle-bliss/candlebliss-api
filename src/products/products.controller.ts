@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Query,
   SerializeOptions,
   UploadedFiles,
   UseGuards,
@@ -17,7 +16,6 @@ import {
   ApiBody,
   ApiConsumes,
   ApiCreatedResponse,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
@@ -30,8 +28,6 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { NullableType } from '../utils/types/nullable.type';
-import { FilterProductDto, SortProductDto } from './dto/query-product.dto';
-import { IPaginationOptions } from '../utils/types/pagination-options';
 
 @ApiTags('Products')
 @Controller('products')
@@ -40,9 +36,6 @@ export class ProductsController {
 
   @ApiCreatedResponse({
     type: Product,
-  })
-  @SerializeOptions({
-    groups: ['admin'],
   })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -57,9 +50,6 @@ export class ProductsController {
         name: { type: 'string' },
         description: { type: 'string' },
         video: { type: 'string' },
-        size: { type: 'string' },
-        type: { type: 'string' },
-        quantities: { type: 'number' },
         images: { type: 'array', items: { type: 'string', format: 'binary' } },
       },
     },
@@ -67,8 +57,8 @@ export class ProductsController {
   create(
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() images: Express.Multer.File[],
-  ): Promise<Product> {
-    return this.services.create(createProductDto, images);
+  ) {
+    return this.services.createProduct(createProductDto, images);
   }
 
   @ApiCreatedResponse({
@@ -89,10 +79,18 @@ export class ProductsController {
         name: { type: 'string' },
         description: { type: 'string' },
         video: { type: 'string' },
-        size: { type: 'string' },
-        type: { type: 'string' },
-        quantities: { type: 'number' },
         images: { type: 'array', items: { type: 'string', format: 'binary' } },
+        productDetail: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              size: { type: 'string' },
+              type: { type: 'string' },
+              quantities: { type: 'number' },
+            },
+          },
+        },
       },
     },
   })
@@ -110,31 +108,6 @@ export class ProductsController {
   @Get()
   findAll(): Promise<Product[]> {
     return this.services.findAll();
-  }
-
-  @ApiCreatedResponse({
-    type: Product,
-  })
-  @Get('paginated')
-  @ApiQuery({ name: 'page', required: false, type: Number })
-  @ApiQuery({ name: 'limit', required: false, type: Number })
-  @ApiQuery({ name: 'type', required: false, type: String })
-  @ApiQuery({ name: 'sort', required: false, type: String, isArray: true })
-  findManyWithPagination(
-    @Query() paginationOptions: IPaginationOptions,
-    @Query() filter?: FilterProductDto | null,
-    @Query() sort?: SortProductDto[] | null,
-  ) {
-    const filterOptions: FilterProductDto = {
-      type: filter?.type || '',
-      ...filter,
-    };
-    const sortOptions = sort || [];
-    return this.services.findManyWithPagination({
-      filterOptions,
-      sortOptions,
-      paginationOptions,
-    });
   }
 
   @ApiCreatedResponse({

@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { EntityRelationalHelper } from 'src/utils/relational-entity-helper';
 import { ImageEntity } from 'src/images/infrastructure/persistence/entity/image.entity';
+import { ProductDetailEntity } from './detail.entity';
 
 @Entity({ name: 'product' })
 export class ProductEntity extends EntityRelationalHelper {
@@ -28,12 +29,10 @@ export class ProductEntity extends EntityRelationalHelper {
   })
   images: ImageEntity[];
 
-  @Column({ type: String, nullable: true })
-  size: string;
-
-  @Column({ type: String, nullable: true })
-  type: string;
-
-  @Column({ type: Number, default: 0 })
-  quantities: number;
+  @OneToMany(
+    () => ProductDetailEntity,
+    (productDetail) => productDetail.product,
+    { eager: true },
+  )
+  details: ProductDetailEntity[];
 }
