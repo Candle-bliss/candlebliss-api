@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { EntityRelationalHelper } from 'src/utils/relational-entity-helper';
-import { ProductEntity } from '../../../../products/infrastucture/persistence/entities/product.entity';
+import { ProductEntity } from 'src/products/infrastucture/persistence/entities/product.entity';
+import { ProductDetailEntity } from 'src/products/infrastucture/persistence/entities/detail.entity';
 
 @Entity({ name: 'image' })
 export class ImageEntity extends EntityRelationalHelper {
@@ -15,4 +16,7 @@ export class ImageEntity extends EntityRelationalHelper {
 
   @ManyToOne(() => ProductEntity)
   product_images: ProductEntity;
+
+  @ManyToOne(() => ProductDetailEntity, (detail) => detail.images)
+  product_details: ProductDetailEntity;
 }
