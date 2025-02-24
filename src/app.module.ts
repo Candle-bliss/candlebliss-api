@@ -28,6 +28,7 @@ import { QueueModule } from './queue/queue.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { ProductsModule } from './products/products.module';
 import { ImagesModule } from './images/images.module';
+import { PriceModule } from './price/price.module';
 import queueConfig from './queue/config/queue.config';
 import cloudinaryConfig from './cloudinary/config/cloudinary.config';
 
@@ -94,6 +95,7 @@ const infrastructureDatabaseModule = TypeOrmModule.forRootAsync({
     CloudinaryModule,
     ProductsModule,
     ImagesModule,
+    PriceModule,
   ],
 })
 export class AppModule {}
