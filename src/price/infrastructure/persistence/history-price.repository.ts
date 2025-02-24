@@ -1,4 +1,4 @@
-import { Product } from '../../../products/domain/product';
+import { Product } from 'src/products/domain/product';
 import { NullableType } from '../../../utils/types/nullable.type';
 import { HistoryPrices } from '../../domain/history_prices';
 

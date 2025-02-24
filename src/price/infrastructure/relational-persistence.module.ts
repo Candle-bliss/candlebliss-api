@@ -6,9 +6,17 @@ import { HistoryPricesRepository } from './persistence/history-price.repository'
 import { HistoryPricesRelationalRepository } from './persistence/repository/history_prices';
 import { PricesRepository } from './persistence/price.repository';
 import { PricesRelationalRepository } from './persistence/repository/prices';
+import { CommandPriceService } from './persistence/command/price.command';
+import { RelationalProductPersistenceModule } from '../../products/infrastucture/relational-persistence.module';
+import { CommandHistoryPriceSerivce } from './persistence/command/history-price.command';
+import { QueryPriceService } from './persistence/queries/price.query';
+import { QueryHistoryPricesService } from './persistence/queries/price-history.query';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PricesEntity, HistoryPricesEntity])],
+  imports: [
+    TypeOrmModule.forFeature([PricesEntity, HistoryPricesEntity]),
+    RelationalProductPersistenceModule,
+  ],
   providers: [
     {
       provide: HistoryPricesRepository,
@@ -18,7 +26,18 @@ import { PricesRelationalRepository } from './persistence/repository/prices';
       provide: PricesRepository,
       useClass: PricesRelationalRepository,
     },
+    CommandPriceService,
+    CommandHistoryPriceSerivce,
+    QueryPriceService,
+    QueryHistoryPricesService,
   ],
-  exports: [HistoryPricesRepository, PricesRepository],
+  exports: [
+    HistoryPricesRepository,
+    PricesRepository,
+    CommandPriceService,
+    CommandHistoryPriceSerivce,
+    QueryPriceService,
+    QueryHistoryPricesService,
+  ],
 })
 export class RelationalPricePersistenceModule {}
