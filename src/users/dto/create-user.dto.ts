@@ -35,6 +35,11 @@ export class CreateUserDto {
   @IsNotEmpty()
   firstName: string | null;
 
+  @ApiProperty({ type: Number, example: 1234567890 })
+  @IsNotEmpty()
+  @Type(() => Number)
+  phone: number | null;
+
   @ApiProperty({ example: 'Aleh', type: String })
   @IsNotEmpty()
   lastName: string | null;

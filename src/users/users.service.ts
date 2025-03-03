@@ -118,6 +118,7 @@ export class UsersService {
       // <creating-property-payload />
       firstName: createUserDto.firstName,
       lastName: createUserDto.lastName,
+      phone: createUserDto.phone,
       email: email,
       password: password,
       photo: photo,
