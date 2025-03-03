@@ -23,6 +23,7 @@ export class UserMapper {
     domainEntity.createdAt = raw.createdAt;
     domainEntity.updatedAt = raw.updatedAt;
     domainEntity.deletedAt = raw.deletedAt;
+    domainEntity.phone = raw.phone;
     return domainEntity;
   }
 
@@ -67,6 +68,8 @@ export class UserMapper {
     persistenceEntity.createdAt = domainEntity.createdAt;
     persistenceEntity.updatedAt = domainEntity.updatedAt;
     persistenceEntity.deletedAt = domainEntity.deletedAt;
+    persistenceEntity.phone = domainEntity.phone;
+
     return persistenceEntity;
   }
 }

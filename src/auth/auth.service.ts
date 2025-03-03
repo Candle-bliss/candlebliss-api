@@ -148,6 +148,7 @@ export class AuthService {
         lastName: socialData.lastName ?? null,
         socialId: socialData.id,
         provider: authProvider,
+        phone: null,
         role,
         status,
       });
@@ -194,8 +195,10 @@ export class AuthService {
   }
 
   async register(dto: AuthRegisterLoginDto): Promise<void> {
+    console.log(dto);
     const user = await this.usersService.create({
       ...dto,
+      phone: dto.phone,
       email: dto.email,
       role: {
         id: RoleEnum.user,

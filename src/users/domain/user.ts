@@ -60,6 +60,11 @@ export class User {
   role?: Role | null;
 
   @ApiProperty({
+    type: Number,
+  })
+  phone: number | null;
+
+  @ApiProperty({
     type: () => Status,
   })
   status?: Status;
