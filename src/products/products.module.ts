@@ -10,5 +10,6 @@ import { ProductDetailService } from './product-detail.service';
   imports: [RelationalProductPersistenceModule, ImagesModule],
   controllers: [ProductsController, ProductDetailsController],
   providers: [ProductsService, ProductDetailService],
+  exports: [ProductsService, ProductDetailService],
 })
 export class ProductsModule {}
