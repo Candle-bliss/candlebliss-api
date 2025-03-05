@@ -5,30 +5,33 @@ import {
 } from '@nestjs/common';
 import { PricesRepository } from '../price.repository';
 import { CreatePriceDto } from '../../../dto/create-price.dto';
-import { ProductRepository } from 'src/products/infrastucture/persistence/product.repository';
 import { Price } from '../../../domain/prices';
 import { UpdatePriceDto } from '../../../dto/update-price.dto';
 import { CommandHistoryPriceSerivce } from './history-price.command';
+import { ProductDetailRepository } from '../../../../products/infrastucture/persistence/product-detail.repository';
 
 @Injectable()
 export class CommandPriceService {
   constructor(
     private readonly priceRepository: PricesRepository,
-    private readonly productRepository: ProductRepository,
+    private readonly productDetailRepository: ProductDetailRepository,
     private readonly commandHistoryCommand: CommandHistoryPriceSerivce,
   ) {}
   async create(createPriceDto: CreatePriceDto) {
-    const product = await this.productRepository.findById(
+    const productDetail = await this.productDetailRepository.findById(
       createPriceDto.productId,
     );
-    if (!product) {
+    if (!productDetail) {
       throw new UnprocessableEntityException({
         errors: {
           productId: 'productNotFound',
         },
       });
     }
-    return await this.priceRepository.create({ ...createPriceDto, product });
+    return await this.priceRepository.create({
+      ...createPriceDto,
+      product_detail: productDetail,
+    });
   }
 
   async update(id: Price['id'], updatePriceDto: UpdatePriceDto) {
@@ -49,7 +52,7 @@ export class CommandPriceService {
       });
     }
 
-    const product = await this.productRepository.findById(productId);
+    const product = await this.productDetailRepository.findById(productId);
     if (!product) {
       throw new NotFoundException({
         errors: 'productNotFound',
@@ -64,6 +67,9 @@ export class CommandPriceService {
       productId,
     });
 
-    return await this.priceRepository.update(id, { ...updatePrice, product });
+    return await this.priceRepository.update(id, {
+      ...updatePrice,
+      product_detail: product,
+    });
   }
 }

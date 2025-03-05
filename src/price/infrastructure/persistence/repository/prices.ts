@@ -49,7 +49,7 @@ export class PricesRelationalRepository implements PricesRepository {
     productId: Product['id'],
   ): Promise<NullableType<Price[]>> {
     return await this.pricesRepsitory.find({
-      where: { product: { id: productId }, isDeleted: false },
+      where: { product_detail: { id: productId }, isDeleted: false },
       relations: ['product'],
     });
   }

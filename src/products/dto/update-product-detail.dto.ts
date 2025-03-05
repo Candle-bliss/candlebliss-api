@@ -21,4 +21,9 @@ export class UpdateProductDetailDto extends PartialType(
   @IsInt()
   @Type(() => Number)
   quantities?: number;
+
+  @ApiPropertyOptional({ type: Boolean, example: true })
+  @IsOptional()
+  @Type(() => Boolean)
+  isActive?: boolean;
 }

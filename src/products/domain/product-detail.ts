@@ -20,4 +20,7 @@ export class ProductDetail {
 
   // @ApiProperty({ type: () => Product })
   product?: Product;
+
+  @ApiProperty({ type: Boolean, example: true })
+  isActive?: boolean;
 }
