@@ -20,6 +20,9 @@ export class ProductDetailEntity extends EntityRelationalHelper {
   @Column({ type: String, nullable: true })
   type?: string;
 
+  @Column({ type: Boolean, default: false })
+  isActive?: boolean;
+
   @Column({ type: Number, default: 0 })
   quantities?: number;
 

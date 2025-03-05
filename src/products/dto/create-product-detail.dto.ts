@@ -23,4 +23,9 @@ export class CreateProductDetailDto {
   @Type(() => Number)
   @IsInt()
   quantities?: number;
+
+  @ApiProperty({ type: Boolean, example: true })
+  @IsOptional()
+  @Type(() => Boolean)
+  isActive?: boolean;
 }

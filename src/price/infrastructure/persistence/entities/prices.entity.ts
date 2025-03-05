@@ -1,6 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { EntityRelationalHelper } from 'src/utils/relational-entity-helper';
-import { ProductEntity } from 'src/products/infrastucture/persistence/entities/product.entity';
+import { ProductDetailEntity } from 'src/products/infrastucture/persistence/entities/detail.entity';
 
 @Entity('prices')
 export class PricesEntity extends EntityRelationalHelper {
@@ -19,6 +25,7 @@ export class PricesEntity extends EntityRelationalHelper {
   @Column({ type: Date, nullable: false })
   end_date: Date;
 
-  @ManyToOne(() => ProductEntity, { eager: true })
-  product: ProductEntity;
+  @OneToOne(() => ProductDetailEntity, { eager: true })
+  @JoinColumn()
+  product_detail: ProductDetailEntity;
 }

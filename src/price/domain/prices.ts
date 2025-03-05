@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Product } from '../../products/domain/product';
+import { ProductDetail } from '../../products/domain/product-detail';
 
 export class Price {
   @ApiProperty({ type: Number })
@@ -17,6 +17,6 @@ export class Price {
   @ApiProperty({ type: Date, example: new Date() })
   end_date: Date;
 
-  @ApiProperty({ type: Product })
-  product: Product;
+  @ApiProperty({ type: ProductDetail })
+  product_detail: ProductDetail;
 }
