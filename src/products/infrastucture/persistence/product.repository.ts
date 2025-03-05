@@ -11,4 +11,5 @@ export abstract class ProductRepository {
   abstract remove(id: Product['id']): Promise<void>;
   abstract findById(id: Product['id']): Promise<Product>;
   abstract findAll(): Promise<Product[]>;
+  abstract findByIds(ids: Product['id'][]): Promise<NullableType<Product[]>>;
 }

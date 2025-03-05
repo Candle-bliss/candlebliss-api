@@ -4,7 +4,7 @@ import { NullableType } from 'src/utils/types/nullable.type';
 import { Product } from '../../../domain/product';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from '../entities/product.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductRelationalRepository implements ProductRepository {
@@ -59,5 +59,12 @@ export class ProductRelationalRepository implements ProductRepository {
   }
   async findAll(): Promise<Product[]> {
     return await this.productRepository.find({ where: { isDeleted: false } });
+  }
+
+  async findByIds(ids: Product['id'][]): Promise<NullableType<Product[]>> {
+    const entities = await this.productRepository.find({
+      where: { id: In(ids), isDeleted: false },
+    });
+    return entities.length ? entities : null;
   }
 }

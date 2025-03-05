@@ -109,4 +109,20 @@ export class VoucherRelationalRepository implements VoucherRepository {
     });
     return entities ? entities : null;
   }
+
+  async findByCode(code: Vouchers['code']): Promise<NullableType<Vouchers>> {
+    const entity = await this.voucherRepository.findOne({
+      where: { code, isDeleted: false },
+    });
+    return entity ? entity : null;
+  }
+
+  async findByCodes(
+    codes: Vouchers['code'][],
+  ): Promise<NullableType<Vouchers[]>> {
+    const entities = await this.voucherRepository.find({
+      where: { code: In(codes), isDeleted: false },
+    });
+    return entities ? entities : null;
+  }
 }

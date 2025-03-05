@@ -1,15 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Product } from '../../products/domain/product';
+import { Type } from 'class-transformer';
 
 export class Vouchers {
   @ApiProperty({ type: Number })
+  @Type(() => Number)
   id: number;
 
   @ApiProperty({ type: String, example: 'CODE12345' })
+  @Type(() => String)
   code: string;
 
   @ApiProperty({ type: String, example: 'Mo ta code su dung nhu the nao' })
-  description: string;
+  description?: string;
 
   @ApiProperty({ type: Number, example: 10000 })
   amount_off?: number;

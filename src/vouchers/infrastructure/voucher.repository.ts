@@ -17,6 +17,11 @@ export abstract class VoucherRepository {
   abstract remove(id: Vouchers['id']): Promise<void>;
 
   abstract findById(id: Vouchers['id']): Promise<NullableType<Vouchers>>;
+  abstract findByCode(code: Vouchers['code']): Promise<NullableType<Vouchers>>;
+
+  abstract findByCodes(
+    codes: Vouchers['code'][],
+  ): Promise<NullableType<Vouchers[]>>;
 
   abstract findAll(): Promise<NullableType<Vouchers[]>>;
 

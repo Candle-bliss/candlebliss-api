@@ -16,8 +16,8 @@ export class VouchersEntity extends EntityRelationalHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Index({ unique: true })
-  @Column({ type: String, unique: true })
+  @Index()
+  @Column({ type: 'varchar', unique: true })
   code: string;
 
   @Column({ type: String, default: '', nullable: true })

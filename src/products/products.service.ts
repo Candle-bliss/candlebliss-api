@@ -61,6 +61,10 @@ export class ProductsService {
     return this.productRepository.findById(id);
   }
 
+  findByIds(ids: Product['id'][]): Promise<NullableType<Product[]>> {
+    return this.productRepository.findByIds(ids);
+  }
+
   remove(id: Product['id']): Promise<void> {
     return this.productRepository.remove(id);
   }
