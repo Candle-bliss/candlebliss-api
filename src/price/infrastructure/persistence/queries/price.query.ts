@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PricesRepository } from '../price.repository';
 import { Price } from '../../../domain/prices';
-import { Product } from 'src/products/domain/product';
+
+import { ProductDetail } from '../../../../products/domain/product-detail';
 
 @Injectable()
 export class QueryPriceService {
@@ -18,10 +19,10 @@ export class QueryPriceService {
     return await this.priceRepository.findAll();
   }
 
-  async findByProductId(productId: Product['id']): Promise<Price[]> {
-    const entities = await this.priceRepository.findByProductId(productId);
+  async findByProductId(detailId: ProductDetail['id']): Promise<Price[]> {
+    const entities = await this.priceRepository.findByProductId(detailId);
     if (!entities) {
-      throw new NotFoundException(`Prices for product ${productId} not found.`);
+      throw new NotFoundException(`Prices for product ${detailId} not found.`);
     }
     return entities;
   }

@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Image } from '../../images/domain/image';
+import { Price } from '../../price/domain/prices';
+import { ProductDetail } from '../../products/domain/product-detail';
 export class Gifts {
   @ApiProperty({ type: Number })
   id: number;
@@ -8,7 +10,7 @@ export class Gifts {
   name: string;
 
   @ApiProperty({ type: String, example: 'Mo ta' })
-  description: string;
+  description?: string;
 
   @ApiProperty({
     type: String,
@@ -17,5 +19,11 @@ export class Gifts {
   video?: string;
 
   @ApiProperty({ type: () => Image })
-  images: Image[];
+  images?: Image[];
+
+  @ApiProperty({ type: () => Price })
+  prices?: Price;
+
+  @ApiProperty({ type: () => ProductDetail })
+  productDetails?: ProductDetail[];
 }

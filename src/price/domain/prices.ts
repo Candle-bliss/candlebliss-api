@@ -18,5 +18,5 @@ export class Price {
   end_date: Date;
 
   @ApiProperty({ type: ProductDetail })
-  product_detail: ProductDetail;
+  product_detail?: ProductDetail;
 }

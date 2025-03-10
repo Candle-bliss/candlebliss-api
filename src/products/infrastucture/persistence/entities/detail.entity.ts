@@ -8,6 +8,7 @@ import {
 import { EntityRelationalHelper } from 'src/utils/relational-entity-helper';
 import { ProductEntity } from './product.entity';
 import { ImageEntity } from 'src/images/infrastructure/persistence/entity/image.entity';
+import { GiftEntity } from '../../../../gifts/infrastruture/persistence/entities/gift.entity';
 
 @Entity({ name: 'product_detail' })
 export class ProductDetailEntity extends EntityRelationalHelper {
@@ -33,4 +34,7 @@ export class ProductDetailEntity extends EntityRelationalHelper {
     eager: true,
   })
   images?: ImageEntity[];
+
+  @ManyToOne(() => GiftEntity, (gift) => gift.productDetails, { eager: true })
+  gift?: GiftEntity;
 }

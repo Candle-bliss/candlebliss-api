@@ -40,7 +40,7 @@ export class ProductsController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(RoleEnum.admin)
-  @UseInterceptors(FilesInterceptor('images', 10))
+  @UseInterceptors(FilesInterceptor('images'))
   @Post()
   @ApiConsumes('multipart/form-data')
   @ApiBody({

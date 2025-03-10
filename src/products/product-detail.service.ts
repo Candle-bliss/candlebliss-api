@@ -64,4 +64,24 @@ export class ProductDetailService {
   async findAllByProductId(productId: Product['id']): Promise<ProductDetail[]> {
     return await this.detailRepository.findAllByProductId(productId);
   }
+
+  async findByIds(detailIds: ProductDetail['id'][]): Promise<ProductDetail[]> {
+    console.log(detailIds);
+    const results = await Promise.allSettled(
+      detailIds.map((detailId) => this.detailRepository.findById(detailId)),
+    );
+    console.log(results);
+    const productDetails = results
+      .filter(
+        (result) => result.status === 'fulfilled' && result.value !== null,
+      )
+      .map((result) => (result as PromiseFulfilledResult<ProductDetail>).value);
+
+    console.log(productDetails);
+    if (productDetails.length === 0) {
+      throw new NotFoundException('Product Details not found');
+    }
+
+    return productDetails;
+  }
 }

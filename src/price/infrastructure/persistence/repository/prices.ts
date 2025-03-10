@@ -1,10 +1,10 @@
-import { Product } from 'src/products/domain/product';
 import { NullableType } from 'src/utils/types/nullable.type';
 import { Price } from '../../../domain/prices';
 import { PricesRepository } from '../price.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PricesEntity } from '../entities/prices.entity';
 import { Repository } from 'typeorm';
+import { ProductDetail } from '../../../../products/domain/product-detail';
 
 export class PricesRelationalRepository implements PricesRepository {
   constructor(
@@ -46,11 +46,11 @@ export class PricesRelationalRepository implements PricesRepository {
     });
   }
   async findByProductId(
-    productId: Product['id'],
+    detailId: ProductDetail['id'],
   ): Promise<NullableType<Price[]>> {
     return await this.pricesRepsitory.find({
-      where: { product_detail: { id: productId }, isDeleted: false },
-      relations: ['product'],
+      where: { product_detail: { id: detailId }, isDeleted: false },
+      relations: ['product_detail'],
     });
   }
 }
