@@ -22,7 +22,7 @@ export class CommandGiftsService {
     createGiftDto: CreateGiftsDto,
     imagesDto: Express.Multer.File[],
   ): Promise<Gifts> {
-    const { productDetailId, ...dto } = createGiftDto;
+    const { productDetailIds, ...dto } = createGiftDto;
     // upload images
     let images: Image[] = [];
     if (imagesDto?.length) {
@@ -41,7 +41,7 @@ export class CommandGiftsService {
     }
     // find productDetails
     const productDetails =
-      await this.productDetailService.findByIds(productDetailId);
+      await this.productDetailService.findByIds(productDetailIds);
     // create gift
 
     return this.repository.create({
@@ -66,6 +66,7 @@ export class CommandGiftsService {
     if (payload.prices && gift.prices) {
       // update prices
       prices = await this.priceService.update(gift.prices.id, payload.prices);
+      console.log(prices);
     }
     let images: Image[] = [];
     if (imagesDto.length) {

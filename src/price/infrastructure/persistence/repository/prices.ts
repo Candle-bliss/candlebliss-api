@@ -35,9 +35,13 @@ export class PricesRelationalRepository implements PricesRepository {
     await this.pricesRepsitory.save(entity);
   }
   async findById(id: Price['id']): Promise<NullableType<Price>> {
-    return await this.pricesRepsitory.findOne({
-      where: { id, isDeleted: false },
-    });
+    const entity = await this.pricesRepsitory
+      .createQueryBuilder()
+      .where('price.id = :id', { id })
+      .andWhere('price.isDeleted = :isDeleted', { isDeleted: false })
+      .getOne();
+
+    return entity ? entity : null;
   }
   async findAll(): Promise<Price[]> {
     return await this.pricesRepsitory.find({

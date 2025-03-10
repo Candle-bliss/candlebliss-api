@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -35,6 +36,6 @@ export class ProductDetailEntity extends EntityRelationalHelper {
   })
   images?: ImageEntity[];
 
-  @ManyToOne(() => GiftEntity, (gift) => gift.productDetails, { eager: true })
+  @ManyToMany(() => GiftEntity, (gift) => gift.productDetails, { eager: true })
   gift?: GiftEntity;
 }

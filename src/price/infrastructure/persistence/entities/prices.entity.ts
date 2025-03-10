@@ -13,10 +13,10 @@ export class PricesEntity extends EntityRelationalHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: Number, nullable: false })
+  @Column({ type: 'decimal', nullable: false })
   base_price: number;
 
-  @Column({ type: Number, nullable: false })
+  @Column({ type: 'decimal', nullable: false })
   discount_price: number;
 
   @Column({ type: Date, nullable: false })

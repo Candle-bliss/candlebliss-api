@@ -37,9 +37,12 @@ export class GiftsRelationalRepsository implements GiftsRepository {
     await this.giftRepository.save(entity);
   }
   async findById(id: Gifts['id']): Promise<NullableType<Gifts>> {
-    const entity = await this.giftRepository.findOne({
-      where: { id, isDeleted: false },
-    });
+    const entity = await this.giftRepository
+      .createQueryBuilder('gift')
+      .where('gift.id = :id', { id })
+      .andWhere('gift.isDeleted = :isDeleted', { isDeleted: false })
+      .getOne();
+
     return entity ? entity : null;
   }
   async findAll(): Promise<NullableType<Gifts[]>> {

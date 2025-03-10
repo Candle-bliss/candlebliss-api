@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -32,6 +34,7 @@ export class GiftEntity extends EntityRelationalHelper {
   @JoinColumn()
   prices?: PricesEntity;
 
-  @OneToMany(() => ProductDetailEntity, (productDetail) => productDetail.gift)
+  @ManyToMany(() => ProductDetailEntity, (productDetail) => productDetail.gift)
+  @JoinTable()
   productDetails?: ProductDetailEntity[];
 }

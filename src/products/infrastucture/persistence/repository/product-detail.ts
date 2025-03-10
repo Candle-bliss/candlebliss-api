@@ -16,15 +16,12 @@ export class ProductDetailRelationalRepository
   async findByIds(
     detailIds: ProductDetail['id'][],
   ): Promise<NullableType<ProductDetail[]>> {
-    if (!Array.isArray(detailIds)) {
-      throw new TypeError('detailIds must be an array');
-    }
-    const details = await Promise.all(
-      detailIds.map((detailId) => {
-        return this.findById(detailId);
-      }),
-    );
-    return details.filter((detail): detail is ProductDetail => detail !== null);
+    const entities = await this.detailRepository
+      .createQueryBuilder('detail')
+      .where('detail.id IN (:...detailIds)', { detailIds })
+      .andWhere('detail.isDeleted = false')
+      .getMany();
+    return entities.length ? entities : null;
   }
   create(data: ProductDetail): Promise<ProductDetail> {
     const entity = this.detailRepository.create({ ...data });
@@ -46,11 +43,12 @@ export class ProductDetailRelationalRepository
   async findById(
     id: ProductDetail['id'],
   ): Promise<NullableType<ProductDetail>> {
-    const entity = await this.detailRepository.findOne({
-      where: { id, isDeleted: false },
-    });
-    if (!entity) return null;
-    return entity;
+    const entity = await this.detailRepository
+      .createQueryBuilder('detail')
+      .where('detail.id = :id', { id })
+      .andWhere('detail.isDeleted = false')
+      .getOne();
+    return entity ? entity : null;
   }
   async remove(id: ProductDetail['id']): Promise<void> {
     const entity = await this.detailRepository.findOne({
