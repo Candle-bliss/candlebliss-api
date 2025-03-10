@@ -1,12 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 
 export class CreateGiftsDto {
   @ApiProperty({ example: 'Nen Thom Huong Vai', type: String })
@@ -51,8 +45,8 @@ export class CreateGiftsDto {
 
   @ApiProperty({ type: [Number] })
   @IsNotEmpty()
-  @IsArray()
-  @IsNumber({}, { each: true })
-  @Type(() => Number)
-  productDetailId: number[];
+  @Transform(({ value }) =>
+    typeof value === 'string' ? value.split(',').map(Number) : value,
+  )
+  productDetailIds: number[];
 }
