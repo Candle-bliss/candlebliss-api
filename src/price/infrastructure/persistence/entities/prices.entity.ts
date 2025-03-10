@@ -27,5 +27,5 @@ export class PricesEntity extends EntityRelationalHelper {
 
   @OneToOne(() => ProductDetailEntity, { eager: true })
   @JoinColumn()
-  product_detail: ProductDetailEntity;
+  product_detail?: ProductDetailEntity;
 }

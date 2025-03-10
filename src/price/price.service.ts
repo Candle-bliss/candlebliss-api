@@ -7,6 +7,7 @@ import { QueryPriceService } from './infrastructure/persistence/queries/price.qu
 import { Product } from '../products/domain/product';
 import { QueryHistoryPricesService } from './infrastructure/persistence/queries/price-history.query';
 import { HistoryPrices } from './domain/history_prices';
+import { ProductDetail } from '../products/domain/product-detail';
 
 @Injectable()
 export class PriceService {
@@ -18,6 +19,10 @@ export class PriceService {
   create(createPriceDto: CreatePriceDto) {
     return this.commandPrices.create(createPriceDto);
   }
+
+  createPriceGift(base: number, discount: number, start: Date, end: Date) {
+    return this.commandPrices.createPriceGift(base, discount, start, end);
+  }
   update(id: Price['id'], updatePriceDto: UpdatePriceDto) {
     return this.commandPrices.update(id, updatePriceDto);
   }
@@ -26,8 +31,8 @@ export class PriceService {
     return this.queryPrices.findById(id);
   }
 
-  findByProductId(productId: Product['id']) {
-    return this.queryPrices.findByProductId(productId);
+  findByProductId(detailId: ProductDetail['id']) {
+    return this.queryPrices.findByProductId(detailId);
   }
 
   findAll() {

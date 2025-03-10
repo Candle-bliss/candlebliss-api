@@ -1,6 +1,6 @@
-import { Product } from 'src/products/domain/product';
 import { NullableType } from 'src/utils/types/nullable.type';
 import { Price } from '../../domain/prices';
+import { ProductDetail } from '../../../products/domain/product-detail';
 
 export abstract class PricesRepository {
   abstract create(data: Omit<Price, 'id'>): Promise<Price>;
@@ -12,6 +12,6 @@ export abstract class PricesRepository {
   abstract findById(id: Price['id']): Promise<NullableType<Price>>;
   abstract findAll(): Promise<Price[]>;
   abstract findByProductId(
-    productId: Product['id'],
+    detailId: ProductDetail['id'],
   ): Promise<NullableType<Price[]>>;
 }

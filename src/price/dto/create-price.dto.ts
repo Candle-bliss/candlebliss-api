@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePriceDto {
   @ApiProperty({ example: '100.000', type: Number })
@@ -26,8 +26,8 @@ export class CreatePriceDto {
   end_date: Date;
 
   @ApiProperty({ example: '1', type: Number })
-  @IsNotEmpty()
   @IsNumber()
+  @IsOptional()
   @Type(() => Number)
   productId: number;
 }

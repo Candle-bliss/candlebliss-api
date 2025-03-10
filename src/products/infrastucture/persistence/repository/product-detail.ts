@@ -13,6 +13,19 @@ export class ProductDetailRelationalRepository
     @InjectRepository(ProductDetailEntity)
     private readonly detailRepository: Repository<ProductDetailEntity>,
   ) {}
+  async findByIds(
+    detailIds: ProductDetail['id'][],
+  ): Promise<NullableType<ProductDetail[]>> {
+    if (!Array.isArray(detailIds)) {
+      throw new TypeError('detailIds must be an array');
+    }
+    const details = await Promise.all(
+      detailIds.map((detailId) => {
+        return this.findById(detailId);
+      }),
+    );
+    return details.filter((detail): detail is ProductDetail => detail !== null);
+  }
   create(data: ProductDetail): Promise<ProductDetail> {
     const entity = this.detailRepository.create({ ...data });
     return this.detailRepository.save(entity);

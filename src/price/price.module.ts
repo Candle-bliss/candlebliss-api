@@ -7,5 +7,6 @@ import { RelationalPricePersistenceModule } from './infrastructure/relational-pe
   controllers: [PriceController],
   providers: [PriceService],
   imports: [RelationalPricePersistenceModule],
+  exports: [PriceService],
 })
 export class PriceModule {}

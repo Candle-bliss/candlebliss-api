@@ -34,6 +34,20 @@ export class CommandPriceService {
     });
   }
 
+  async createPriceGift(
+    base: number,
+    discount: number,
+    start: Date,
+    end: Date,
+  ) {
+    return await this.priceRepository.create({
+      base_price: base,
+      discount_price: discount,
+      start_date: start,
+      end_date: end,
+    });
+  }
+
   async update(id: Price['id'], updatePriceDto: UpdatePriceDto) {
     const { productId, ...updatePrice } = updatePriceDto;
 

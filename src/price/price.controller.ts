@@ -26,6 +26,7 @@ import { CreatePriceDto } from './dto/create-price.dto';
 import { UpdatePriceDto } from './dto/update-price.dto';
 import { Product } from '../products/domain/product';
 import { HistoryPrices } from './domain/history_prices';
+import { ProductDetail } from '../products/domain/product-detail';
 
 @ApiTags('Prices')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -91,9 +92,9 @@ export class PriceController {
     required: true,
   })
   @HttpCode(HttpStatus.OK)
-  @Get('product/:productId')
-  findAllByProductId(@Param('productId') productId: Product['id']) {
-    return this.service.findByProductId(productId);
+  @Get('product-detail/:productId')
+  findAllByProductId(@Param('detailId') detailId: ProductDetail['id']) {
+    return this.service.findByProductId(detailId);
   }
 
   @HttpCode(HttpStatus.OK)
