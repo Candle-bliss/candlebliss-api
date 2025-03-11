@@ -36,7 +36,7 @@ export class PricesRelationalRepository implements PricesRepository {
   }
   async findById(id: Price['id']): Promise<NullableType<Price>> {
     const entity = await this.pricesRepsitory
-      .createQueryBuilder()
+      .createQueryBuilder('price')
       .where('price.id = :id', { id })
       .andWhere('price.isDeleted = :isDeleted', { isDeleted: false })
       .getOne();
@@ -44,17 +44,22 @@ export class PricesRelationalRepository implements PricesRepository {
     return entity ? entity : null;
   }
   async findAll(): Promise<Price[]> {
-    return await this.pricesRepsitory.find({
-      where: { isDeleted: false },
-      relations: ['product'],
-    });
+    return await this.pricesRepsitory
+      .createQueryBuilder('price')
+      .leftJoinAndSelect('price.product_detail', 'product_detail')
+      .where('price.isDeleted = :isDeleted', { isDeleted: false })
+      .getMany();
   }
   async findByProductId(
     detailId: ProductDetail['id'],
   ): Promise<NullableType<Price[]>> {
-    return await this.pricesRepsitory.find({
-      where: { product_detail: { id: detailId }, isDeleted: false },
-      relations: ['product_detail'],
-    });
+    const queryBuilder = this.pricesRepsitory.createQueryBuilder('price');
+    const prices = await queryBuilder
+      .leftJoinAndSelect('price.product_detail', 'product_detail')
+      .where('product_detail.id = :detailId', { detailId })
+      .andWhere('price.isDeleted = :isDeleted', { isDeleted: false })
+      .getMany();
+
+    return prices.length ? prices : null;
   }
 }

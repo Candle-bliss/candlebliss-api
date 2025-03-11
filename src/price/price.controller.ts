@@ -87,12 +87,12 @@ export class PriceController {
     type: [Price],
   })
   @ApiParam({
-    name: 'productId',
+    name: 'detailId',
     type: Number,
     required: true,
   })
   @HttpCode(HttpStatus.OK)
-  @Get('product-detail/:productId')
+  @Get('product-detail/:detailId')
   findAllByProductId(@Param('detailId') detailId: ProductDetail['id']) {
     return this.service.findByProductId(detailId);
   }
