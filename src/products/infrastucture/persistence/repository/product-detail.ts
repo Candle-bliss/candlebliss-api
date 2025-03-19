@@ -59,9 +59,11 @@ export class ProductDetailRelationalRepository
     await this.detailRepository.save(entity);
   }
   async findAllByProductId(productId: Product['id']): Promise<ProductDetail[]> {
-    return await this.detailRepository.find({
-      where: { product: { id: productId }, isDeleted: false },
-      relations: ['product'],
-    });
+    return await this.detailRepository
+      .createQueryBuilder('detail')
+      .innerJoinAndSelect('detail.product', 'product')
+      .where('detail.productId = :productId', { productId })
+      .andWhere('detail.isDeleted = :isDeleted', { isDeleted: false })
+      .getMany();
   }
 }
